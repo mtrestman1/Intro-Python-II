@@ -40,7 +40,7 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
-player = Player('Max', 'outside')
+player = Player('Max', room['outside'])
 
 
 # Write a loop that:
@@ -54,19 +54,31 @@ player = Player('Max', 'outside')
 #
 # If the user enters "q", quit the game.
 
+def different_way():
+    print('You cannot move that way, try a different way')
+    return
+
+def making_moves(player, direction):
+    attr = direction + '_to'
+
+    if hasattr(player.room, attr):
+        move_rooms = getattr(player.room, attr)
+        player.room = move_rooms
+        return
+    else:
+        different_way()
+
 playing = True
 while playing:
-    print('Location: ' + player.room)
-    print(room[player.room].description)
+    print('Location: ' + player.room.name)
+    print(player.room.description)
+    for x in player.room.items:
+        print(x.name)
     direction = input('Which way? (n/e/s/w) or press q to quit\n=>')
-    if direction.lower().strip() == 'n':
-        print('You are in room foyer')
-    elif direction.lower().strip() == 'e' or 's' or 'w': 
-        print('You cannot move that way, try a different way')
-    elif direction.lower().strip() == 'q':
+  
+    
+    if direction.lower().strip() == 'q':
         print('goodbye')
         playing = False
-        break
-  
-   
-
+    else: 
+        making_moves(player, direction)
