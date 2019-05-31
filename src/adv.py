@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -39,6 +40,9 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+player = Player('Max', room['outside'])
+
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +53,32 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+def different_way():
+    print('You cannot move that way, try a different way')
+    return
+
+def making_moves(player, direction):
+    attr = direction + '_to'
+
+    if hasattr(player.room, attr):
+        move_rooms = getattr(player.room, attr)
+        player.room = move_rooms
+        return
+    else:
+        different_way()
+
+playing = True
+while playing:
+    print('Location: ' + player.room.name)
+    print(player.room.description)
+    for x in player.room.items:
+        print(x.name)
+    direction = input('Which way? (n/e/s/w) or press q to quit\n=>')
+  
+    
+    if direction.lower().strip() == 'q':
+        print('goodbye')
+        playing = False
+    else: 
+        making_moves(player, direction)
